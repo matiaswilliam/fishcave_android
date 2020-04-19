@@ -1,0 +1,24 @@
+{
+  "name": "fishcave",
+  "version": "1.0.0",
+  "description": "The fishcave game.",
+  "main": "index.ts",
+  "scripts": {
+    "build": "webpack",
+    "dev": "webpack-dev-server"
+  },
+  "author": "William Matias",
+  "license": "ISC",
+  "dependencies": {
+    "phaser": "^3.22.0",
+    "rxjs": "^6.5.5"
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "^5.1.1",
+    "ts-loader": "^6.2.2",
+    "typescript": "^3.8.3",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
+  }
+}
