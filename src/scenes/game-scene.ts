@@ -65,14 +65,15 @@ export class GameScene extends Phaser.Scene {
       this
     );
     this.input.mouse.capture = true;
+    let player = this.player;
+
+    this.input.on("pointerup", function (pointer) {
+      if (pointer.leftButtonReleased()) {
+        player.setVelocityY(-230);
+      }
+    });
   }
   public update() {
-    this.player.anims.play("swim", true);
-
-    if (this.input.activePointer.isDown) {
-      this.player.setVelocityY(-130);
-      console.log("click");
-    }
   }
 
   setUpPlatforms() {
