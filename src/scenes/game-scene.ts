@@ -33,7 +33,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   public create() {
-    this.add.image(250, 405, "background");
+    this.add.image(0, 0, "background").setOrigin(0);
     this.setUpRocks();
 
     this.scoreText = this.add.text(15, 100, "SCORE: 0", {
@@ -70,21 +70,22 @@ export class GameScene extends Phaser.Scene {
     this.input.on("pointerup", function (pointer) {
       if (pointer.leftButtonReleased()) {
         player.setVelocityY(-230);
+        player.setVelocityX(130);
       }
     });
   }
   public update() {
+    this.cameras.main.centerOnX(this.player.x);
   }
 
   setUpPlatforms() {
     this.platforms = this.physics.add.staticGroup();
     this.platforms.create(100, 35, "ground").setAngle(180);
-    this.platforms.create(100, 715, "ground");
+    this.platforms.create(100, 750, "ground");
   }
 
   setUpPlayer() {
     this.player = this.physics.add.sprite(200, 250, "fish");
-    this.player.setCollideWorldBounds(true);
 
     this.anims.create({
       key: "swim",
