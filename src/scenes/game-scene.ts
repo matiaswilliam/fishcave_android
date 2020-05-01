@@ -33,7 +33,8 @@ export class GameScene extends Phaser.Scene {
   }
 
   public create() {
-    this.add.image(0, 0, "background").setOrigin(0);
+
+    this.add.image(0, 0, 'background').setOrigin(0);
     this.setUpRocks();
 
     this.scoreText = this.add.text(15, 100, "SCORE: 0", {
@@ -43,49 +44,38 @@ export class GameScene extends Phaser.Scene {
     this.setUpPlatforms();
     this.setUpPlayer();
     this.physics.add.collider(this.player, this.platforms);
-    this.bombs = this.physics.add.group();
 
-    this.physics.add.collider(this.bombs, this.platforms);
 
     this.cursors = this.input.keyboard.createCursorKeys();
 
-    // this.physics.add.overlap(
+    // this.physics.add.collider(
     //   this.player,
-    //   this.rocks,
-    //   this.collectStar,
+    //   this.bombs,
+    //   this.hitBomb,
     //   null,
     //   this
     // );
-
-    this.physics.add.collider(
-      this.player,
-      this.bombs,
-      this.hitBomb,
-      null,
-      this
-    );
     this.input.mouse.capture = true;
     let player = this.player;
 
     this.input.on("pointerup", function (pointer) {
       if (pointer.leftButtonReleased()) {
         player.setVelocityY(-230);
-        player.setVelocityX(130);
       }
     });
   }
   public update() {
-    this.cameras.main.centerOnX(this.player.x);
   }
 
   setUpPlatforms() {
     this.platforms = this.physics.add.staticGroup();
     this.platforms.create(100, 35, "ground").setAngle(180);
-    this.platforms.create(100, 750, "ground");
+    this.platforms.create(100, 765, "ground");
   }
 
   setUpPlayer() {
     this.player = this.physics.add.sprite(200, 250, "fish");
+    // this.player.setCollideWorldBounds(true);
 
     this.anims.create({
       key: "swim",
@@ -96,10 +86,11 @@ export class GameScene extends Phaser.Scene {
   }
 
   setUpRocks() {
-    this.rocks = this.physics.add.staticGroup({
+    this.rocks = this.physics.add.group({
       key: "rock",
-      repeat: 4,
-      setXY: { x: 100, y: 600, stepX: 140 },
+      repeat: 100,
+      setXY: { x: 100, y: 650, stepX: 140 },
+      gravityY: -200,
     });
 
     this.rocks.children.iterate((child) => {
@@ -107,6 +98,7 @@ export class GameScene extends Phaser.Scene {
         child.setAngle(180);
         child.setY(150);
       }
+      child.setVelocityX(-200);
     });
   }
 
@@ -115,23 +107,7 @@ export class GameScene extends Phaser.Scene {
     this.scoreText.setText("SCORE: " + this.score);
     // this.releaseBomp();
   }
-  releaseBomp() {
-    if (this.rocks.countActive(true) === 0) {
-      this.rocks.children.iterate(function (child) {
-        child.enableBody(true, child.x, 0, true, true);
-      });
 
-      let x =
-        this.player.x < 400
-          ? Phaser.Math.Between(400, 800)
-          : Phaser.Math.Between(0, 400);
-
-      let bomb = this.bombs.create(x, 16, "bomb");
-      bomb.setBounce(1);
-      bomb.setCollideWorldBounds(true);
-      bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
-    }
-  }
 
   hitBomb(player, bomb) {
     this.physics.pause();
